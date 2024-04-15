@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
 import { content } from '../../LanguageContent.ts';
+import type { RootState } from '../app/store';
 import mundo from '../assets/animations/mundo.json';
 import { useLottie } from 'lottie-react';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
+  const language: string = useSelector(
+    (state: RootState) => state.language.language
+  );
   // lottie animation settings
   const options = {
     animationData: mundo,
     loop: true,
   };
-
-  const language = 'en';
 
   const { View } = useLottie(options);
 
@@ -27,6 +30,7 @@ const Home = () => {
         </div>
         <div className="flex flex-col items-center">
           <h2 className="text-center w-full max-w-md">
+           {/*  TODO: handle type error */}
             {content[language].homePage.title}
           </h2>
           <div className="flex  my-9 flex-col gap-3 w-full md:w-[70%] text-center ">
