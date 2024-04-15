@@ -4,6 +4,7 @@ import mundo from '../assets/animations/mundo.json';
 import { useLottie } from 'lottie-react';
 
 const Home = () => {
+  // lottie animation settings
   const options = {
     animationData: mundo,
     loop: true,
