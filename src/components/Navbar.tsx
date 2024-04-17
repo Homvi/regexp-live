@@ -6,6 +6,7 @@ import { RootState } from '../app/store.ts';
 import { changeLanguage } from '../features/language/languageSlice.ts';
 import { changeFontSize } from '../features/accessibility/accessibilitySlice.ts';
 import { LanguageCode } from '../../LanguageContent.ts';
+import { useRef } from 'react';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,21 @@ const Navbar = () => {
   const handleLogout = () => {
     // TODO: Handle logout
   };
+
+  const languageSettingsDrawerRef = useRef<HTMLDetailsElement>(null);
+  const fontSizeSettingsDrawerRef = useRef<HTMLDetailsElement>(null);
+
+  function closeMenu() {
+    if (
+      languageSettingsDrawerRef.current &&
+      fontSizeSettingsDrawerRef.current
+    ) {
+      languageSettingsDrawerRef.current.open = false;
+      fontSizeSettingsDrawerRef.current.open = false;
+    } else {
+      return;
+    }
+  }
 
   return (
     <div className="navbar bg-base-100 font-nova border-b-[1px] py-4 border-[#05213819] fixed top-0 z-40">
@@ -56,13 +72,18 @@ const Navbar = () => {
             </li>
           )}
           <li>
-            <details>
+            <details ref={languageSettingsDrawerRef}>
               <summary>{content[language].navBar.language}</summary>
               <ul className="flex">
                 <div className="form-control">
                   <label className="label cursor-pointer">
                     <ul>
-                      <li onClick={() => dispatch(changeLanguage('es'))}>
+                      <li
+                        onClick={() => {
+                          dispatch(changeLanguage('es'));
+                          closeMenu();
+                        }}
+                      >
                         <button
                           disabled={language === 'es'}
                           className="btn mb-2 z-50"
@@ -70,7 +91,12 @@ const Navbar = () => {
                           Español
                         </button>
                       </li>
-                      <li onClick={() => dispatch(changeLanguage('en'))}>
+                      <li
+                        onClick={() => {
+                          dispatch(changeLanguage('en'));
+                          closeMenu();
+                        }}
+                      >
                         <button
                           disabled={language === 'en'}
                           className="btn z-50"
@@ -85,7 +111,7 @@ const Navbar = () => {
             </details>
           </li>
           <li>
-            <details>
+            <details ref={fontSizeSettingsDrawerRef}>
               <summary>{content[language].navBar.accessibility}</summary>
               <ul className="flex">
                 <div className="form-control">
@@ -96,7 +122,10 @@ const Navbar = () => {
                     <input
                       type="checkbox"
                       className="toggle ml-3"
-                      onChange={() => dispatch(changeFontSize())}
+                      onChange={() => {
+                        dispatch(changeFontSize());
+                        closeMenu();
+                      }}
                       checked={isFontSizeLarge}
                     />
                   </label>
