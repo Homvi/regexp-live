@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { content } from '../../LanguageContent.ts';
 import { RootState } from '../app/store.ts';
 import { changeLanguage } from '../features/language/languageSlice.ts';
+import { LanguageCode } from '../../LanguageContent.ts';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -15,12 +16,13 @@ const Navbar = () => {
   // TODO: Handle user dynamically
   const isFontSizeLarge = false;
 
-  const language: string = useSelector(
+  const language: LanguageCode = useSelector(
     (state: RootState) => state.language.language
   );
 
-  const changeFontSize = () => {
+  const changeFontSize = (isFontSizeLarge: boolean) => {
     // TODO: chnage font size
+    console.log(isFontSizeLarge);
   };
 
   const handleLogout = () => {

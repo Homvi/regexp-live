@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { LanguageCode } from '../../../LanguageContent'
 
-export interface CounterState {
-  language: string;
+interface State {
+  language: LanguageCode;
 }
 
-const initialState: CounterState = {
-  language: 'en',
+const initialState: State = {
+  language: 'en', // default language
 };
 
 export const counterSlice = createSlice({
   name: 'language',
   initialState,
   reducers: {
-    changeLanguage: (state, action: PayloadAction<string>) => {
+    changeLanguage: (state: State, action: PayloadAction<LanguageCode>) => {
       state.language = action.payload;
     },
   },
