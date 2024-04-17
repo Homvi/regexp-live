@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { content } from '../../LanguageContent.ts';
 import { RootState } from '../app/store.ts';
 import { changeLanguage } from '../features/language/languageSlice.ts';
+import { changeFontSize } from '../features/accessibility/accessibilitySlice.ts';
 import { LanguageCode } from '../../LanguageContent.ts';
 
 const Navbar = () => {
@@ -13,17 +14,13 @@ const Navbar = () => {
     firstName: 'John',
   };
 
-  // TODO: Handle user dynamically
-  const isFontSizeLarge = false;
-
   const language: LanguageCode = useSelector(
     (state: RootState) => state.language.language
   );
 
-  const changeFontSize = (isFontSizeLarge: boolean) => {
-    // TODO: chnage font size
-    console.log(isFontSizeLarge);
-  };
+  const isFontSizeLarge: boolean = useSelector(
+    (state: RootState) => state.accessibility.isFontsizeLarge
+  );
 
   const handleLogout = () => {
     // TODO: Handle logout
@@ -69,7 +66,6 @@ const Navbar = () => {
                         <button
                           disabled={language === 'es'}
                           className="btn mb-2 z-50"
-                          // Pass the negation of current value
                         >
                           Español
                         </button>
@@ -100,7 +96,7 @@ const Navbar = () => {
                     <input
                       type="checkbox"
                       className="toggle ml-3"
-                      onChange={() => changeFontSize(!isFontSizeLarge)}
+                      onChange={() => dispatch(changeFontSize())}
                       checked={isFontSizeLarge}
                     />
                   </label>
