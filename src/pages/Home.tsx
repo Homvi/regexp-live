@@ -9,7 +9,12 @@ const Home = () => {
   const language: LanguageCode = useSelector(
     (state: RootState) => state.language.language
   );
-  // lottie animation settings
+
+  const isFontSizeLarge: boolean = useSelector(
+    (state: RootState) => state.accessibility.isFontsizeLarge
+  );
+
+  // lottie animation configuration
   const options = {
     animationData: mundo,
     loop: true,
@@ -21,16 +26,23 @@ const Home = () => {
     <>
       <div
         className={
-          'px-2 text-2xl min-h-screen flex flex-col md:flex-row items-center font-nova'
+          isFontSizeLarge
+            ? ' px-2 text-3xl min-h-screen flex-col items-center font-nova overflow-hidden'
+            : ' px-2 text-2xl min-h-screen flex flex-col md:flex-row items-center font-nova'
         }
       >
-        <div className={'flex my-11 md:w-[40%] justify-center h-full '}>
+        <div
+          className={
+            isFontSizeLarge
+              ? 'flex mt-32 mb-8 justify-center h-full'
+              : 'flex my-11 md:w-[40%] justify-center h-full '
+          }
+        >
           {/* lottie animation */}
           {View}
         </div>
         <div className="flex flex-col items-center">
           <h2 className="text-center w-full max-w-md">
-            {/*  TODO: handle type error */}
             {content[language].homePage.title}
           </h2>
           <div className="flex  my-9 flex-col gap-3 w-full md:w-[70%] text-center ">
