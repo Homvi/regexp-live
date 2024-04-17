@@ -1,11 +1,16 @@
-// Interface for the structure of the homepage content
+// supported languages array
+export const supportedLanguages = ['en', 'es'] as const;
+
+// Type guard to check if the language is supported
+export  type LanguageCode = (typeof supportedLanguages)[number];
+
 interface HomePageContent {
   title: string;
   getStartedButton: string;
   login: string;
 }
 
-interface navBar {
+interface NavBarContent {
   request: string;
   language: string;
   accessibility: string;
@@ -15,19 +20,16 @@ interface navBar {
   logout: string;
 }
 
-// Interface for the content of each language
 interface LanguageContent {
   homePage: HomePageContent;
-  navBar: navBar;
+  navBar: NavBarContent;
 }
 
-// Interface for the overall content structure
-interface MultiLanguageContent {
-  en: LanguageContent;
-  es: LanguageContent;
-}
+type MultiLanguageContent = {
+  // The key is the language code
+  [K in LanguageCode]: LanguageContent;
+};
 
-// Defining the content with its structure
 export const content: MultiLanguageContent = {
   en: {
     homePage: {
