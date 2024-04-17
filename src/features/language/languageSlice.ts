@@ -10,7 +10,7 @@ const initialState: State = {
   language: 'en', // default language
 };
 
-export const counterSlice = createSlice({
+export const languageSlice = createSlice({
   name: 'language',
   initialState,
   reducers: {
@@ -21,6 +21,6 @@ export const counterSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { changeLanguage } = counterSlice.actions;
+export const { changeLanguage } = languageSlice.actions;
 
-export default counterSlice.reducer;
+export default languageSlice.reducer;
