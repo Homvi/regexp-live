@@ -43,7 +43,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-base-100 font-nova border-b-[1px] py-4 border-[#05213819] fixed top-0 z-40">
+    <div className="navbar bg-base-100 font-nova border-b-[1px] py-4 border-[#05213819] fixed top-0 z-40 hidden md:flex">
       <div className="flex-1">
         <Link
           to="/"
