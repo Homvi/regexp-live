@@ -23,12 +23,6 @@ const MobileNavbar = () => {
     (state: RootState) => state.language.language
   );
 
-  useEffect(() => {
-    console.log(language);
-  }, [language]);
-
-  console.log(language);
-
   const isFontSizeLarge: boolean = useSelector(
     (state: RootState) => state.accessibility.isFontsizeLarge
   );

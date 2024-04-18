@@ -2,7 +2,7 @@
 export const supportedLanguages = ['en', 'es'] as const;
 
 // Type guard to check if the language is supported
-export  type LanguageCode = (typeof supportedLanguages)[number];
+export type LanguageCode = (typeof supportedLanguages)[number];
 
 interface HomePageContent {
   title: string;
@@ -20,9 +20,18 @@ interface NavBarContent {
   logout: string;
 }
 
+interface Login {
+  login: string;
+  email: string;
+  pass: string;
+  loginOk: string;
+  loginFail: string;
+}
+
 interface LanguageContent {
   homePage: HomePageContent;
   navBar: NavBarContent;
+  login: Login;
 }
 
 type MultiLanguageContent = {
@@ -46,6 +55,13 @@ export const content: MultiLanguageContent = {
       login: 'Log in',
       logout: 'Log out',
     },
+    login: {
+      login: 'Log in',
+      email: 'Email',
+      pass: 'Password',
+      loginOk: 'You have succesfully logged in!',
+      loginFail: "Oops it didn't work!",
+    },
   },
   es: {
     homePage: {
@@ -61,6 +77,13 @@ export const content: MultiLanguageContent = {
       register: 'Registrarse',
       login: 'Iniciar sesión',
       logout: 'Cerrar sesión',
+    },
+    login: {
+      login: 'Iniciar sesión',
+      email: 'Correo electrónico',
+      pass: 'Contraseña',
+      loginOk: 'Has iniciado sesión correctamente',
+      loginFail: '¡Oops, algo salió mal!',
     },
   },
 };
