@@ -12,7 +12,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   // TODO: Handle user dynamically
   const loggedInUser = {
-    firstName: 'John',
+    firstName: null,
   };
 
   const language: LanguageCode = useSelector(
