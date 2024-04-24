@@ -20,6 +20,21 @@ interface NavBarContent {
   logout: string;
 }
 
+interface Register {
+  register: string;
+  name1: string;
+  name2: string;
+  username: string;
+  email: string;
+  pass1: string;
+  pass2: string;
+  terms: string;
+  errPrivacy: string;
+  errPass: string;
+  registerOk: string;
+  registerFail: string;
+}
+
 interface Login {
   login: string;
   email: string;
@@ -32,6 +47,7 @@ interface LanguageContent {
   homePage: HomePageContent;
   navBar: NavBarContent;
   login: Login;
+  register: Register;
 }
 
 type MultiLanguageContent = {
@@ -62,6 +78,20 @@ export const content: MultiLanguageContent = {
       loginOk: 'You have succesfully logged in!',
       loginFail: "Oops it didn't work!",
     },
+    register: {
+      register: 'Register',
+      name1: 'First name',
+      name2: 'Last name',
+      username: 'Username',
+      email: 'Email',
+      pass1: 'Password',
+      pass2: 'Password again',
+      terms: 'I have read and accept the privacy policy',
+      errPrivacy: 'Accept privacy!',
+      errPass: "The passwords didn't match",
+      registerOk: 'The registration was successfull',
+      registerFail: "Oops it didn't work!",
+    },
   },
   es: {
     homePage: {
@@ -84,6 +114,20 @@ export const content: MultiLanguageContent = {
       pass: 'Contraseña',
       loginOk: 'Has iniciado sesión correctamente',
       loginFail: '¡Oops, algo salió mal!',
+    },
+    register: {
+      register: 'Registrarse',
+      name1: 'Nombre',
+      name2: 'Apellido',
+      username: 'Nombre de usuario',
+      email: 'Correo electrónico',
+      pass1: 'Contraseña',
+      pass2: 'Repetir contraseña',
+      terms: 'He leído y acepto la política de privacidad',
+      errPrivacy: '¡Acepta la política de privacidad!',
+      errPass: 'Las contraseñas no coinciden',
+      registerOk: 'El registro fue exitoso',
+      registerFail: '¡Ups, algo salió mal!',
     },
   },
 };
