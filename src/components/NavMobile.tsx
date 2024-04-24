@@ -112,19 +112,17 @@ const MobileNavbar = () => {
               {' '}
               <details>
                 <summary>{content[language].navBar.accessibility}</summary>
-                <ul className="flex">
-                  <div className="form-control">
-                    <label className="label cursor-pointer">
-                      <span className="label-text">
-                        {content[language].navBar.font}
-                      </span>
-                      <input
-                        type="checkbox"
-                        className="toggle ml-3"
-                        onChange={() => dispatch(changeFontSize())}
-                        checked={isFontSizeLarge}
-                      />
-                    </label>
+                <ul className="flex justify-start ">
+                  <div className="form-control flex flex-wrap  w-full">
+                    <span className="label-text w-fit">
+                      {content[language].navBar.font}
+                    </span>
+                    <input
+                      type="checkbox"
+                      className="toggle mt-1"
+                      onChange={() => dispatch(changeFontSize())}
+                      checked={isFontSizeLarge}
+                    />
                   </div>
                 </ul>
               </details>
