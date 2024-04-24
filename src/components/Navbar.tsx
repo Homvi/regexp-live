@@ -10,7 +10,7 @@ import { useRef } from 'react';
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  // TODO: Handle user dynamically
+  // TODO: BE - Handle user dynamically
   const loggedInUser = {
     firstName: null,
   };
@@ -24,7 +24,7 @@ const Navbar = () => {
   );
 
   const handleLogout = () => {
-    // TODO: Handle logout
+    // TODO: BE - Handle logout
   };
 
   const languageSettingsDrawerRef = useRef<HTMLDetailsElement>(null);

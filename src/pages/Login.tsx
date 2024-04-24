@@ -21,7 +21,7 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Handle login
+    // TODO: BE - Handle login
   };
 
   return (

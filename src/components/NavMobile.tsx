@@ -5,16 +5,15 @@ import { changeFontSize } from '../features/accessibility/accessibilitySlice';
 import { LanguageCode, content } from '../../LanguageContent';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
-import { useEffect } from 'react';
 
 const MobileNavbar = () => {
   const dispatch = useDispatch();
   const handleLogout = () => {
-    // TODO: Handle logout
+    // TODO: BE - Handle logout
     //navigate user to welcome page
   };
 
-  // TODO: Handle user dynamically
+  // TODO: BE - Handle user dynamically
   const loggedInUser = {
     firstName: null,
   };
