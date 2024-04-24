@@ -48,12 +48,22 @@ interface ChoosePage {
   spanish: string;
   english: string;
 }
+
+interface Score {
+  score: string;
+  good: string;
+  excellent: string;
+  main: string;
+  more: string;
+}
+
 interface LanguageContent {
   homePage: HomePageContent;
   navBar: NavBarContent;
   login: Login;
   register: Register;
   choosePage: ChoosePage;
+  score: Score;
 }
 
 type MultiLanguageContent = {
@@ -103,6 +113,13 @@ export const content: MultiLanguageContent = {
       spanish: 'Spanish Expressions',
       english: 'English Expressions',
     },
+    score: {
+      score: 'Your score:',
+      good: 'Good Job!',
+      excellent: 'Excellent!',
+      main: 'Go to main page',
+      more: 'Give me 5 more',
+    },
   },
   es: {
     homePage: {
@@ -144,6 +161,13 @@ export const content: MultiLanguageContent = {
       learn: 'Quiero aprender...',
       spanish: 'Expresiones en español',
       english: 'Expresiones en inglés',
+    },
+    score: {
+      score: 'Tu puntuación:',
+      good: '¡Buen trabajo!',
+      excellent: '¡Excelente!',
+      main: 'Página principal',
+      more: 'Dame 5 más',
     },
   },
 };
