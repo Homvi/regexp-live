@@ -43,11 +43,17 @@ interface Login {
   loginFail: string;
 }
 
+interface ChoosePage {
+  learn: string;
+  spanish: string;
+  english: string;
+}
 interface LanguageContent {
   homePage: HomePageContent;
   navBar: NavBarContent;
   login: Login;
   register: Register;
+  choosePage: ChoosePage;
 }
 
 type MultiLanguageContent = {
@@ -92,6 +98,11 @@ export const content: MultiLanguageContent = {
       registerOk: 'The registration was successfull',
       registerFail: "Oops it didn't work!",
     },
+    choosePage: {
+      learn: 'I want to learn...',
+      spanish: 'Spanish Expressions',
+      english: 'English Expressions',
+    },
   },
   es: {
     homePage: {
@@ -128,6 +139,11 @@ export const content: MultiLanguageContent = {
       errPass: 'Las contraseñas no coinciden',
       registerOk: 'El registro fue exitoso',
       registerFail: '¡Ups, algo salió mal!',
+    },
+    choosePage: {
+      learn: 'Quiero aprender...',
+      spanish: 'Expresiones en español',
+      english: 'Expresiones en inglés',
     },
   },
 };
