@@ -51,8 +51,8 @@ const Score: React.FC<ScoreProps> = ({ score, resetGame }) => {
   }, [score]);
 
   return (
-    <div className="flex justify-start flex-col items-center gap-6">
-      <div className="max-w-sm">{View}</div>
+    <div className="flex justify-start flex-col items-center gap-6 w-full my-5">
+      <div className="w-56 sm:max-w-2xl">{View}</div>
       <h2 className="text-[#052138a4] text-2xl">
         {content[language].score.score}{' '}
         <span
@@ -77,14 +77,14 @@ const Score: React.FC<ScoreProps> = ({ score, resetGame }) => {
       )}
       <div className="flex gap-6 justify-center w-full text-center">
         <Link
-          className="bg-[#052138] whitespace-nowrap shadow-md text-white py-2 transition-all duration-300 hover:scale-105 hover:shadow-xl w-[40%] rounded-lg px-1 max-w-[200px]"
+          className="bg-[#052138] whitespace-nowrap shadow-md text-white py-2 transition-all duration-300 hover:scale-105 w-[40%] rounded-lg px-1 max-w-[200px]"
           to={'/'}
         >
           {content[language].score.main}
         </Link>
         <button
           onClick={resetGame}
-          className="bg-[#60AC90] whitespace-nowrap shadow-md text-white py-2 transition-all duration-300 hover:scale-105 hover:shadow-xl w-[40%] rounded-lg px-1 max-w-[200px]"
+          className="bg-[#60AC90] whitespace-nowrap shadow-md text-white py-2 transition-all duration-300 hover:scale-105 w-[40%] rounded-lg px-1 max-w-[200px]"
         >
           {content[language].score.more}
         </button>
