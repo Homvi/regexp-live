@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-//import Expression from "../components/Expression";
 import ExpressionType from '../types.ts';
 import Score from '../components/Score.tsx';
 import ProgressBar from '../components/ProgressBar.tsx';
