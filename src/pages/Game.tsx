@@ -179,7 +179,7 @@ const Game = () => {
   };
 
   return (
-    <div className="h-full relative flex justify-start items-center flex-col gap-3 font-nova overflow-x-hidden mt-32 mx-3">
+    <div className="h-full relative flex justify-start items-center flex-col gap-3 font-nova overflow-x-hidden mt-3  mx-3">
       {loading && <p>Loading...</p>}
       {loading && <span className="loading loading-infinity loading-lg"></span>}
       {!loading && !isGameFinished && (
