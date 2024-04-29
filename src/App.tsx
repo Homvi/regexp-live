@@ -26,11 +26,7 @@ function App() {
           element={<ChooseLanguage />}
         />
         <Route
-          path="/spanishExpressions"
-          element={<Game />}
-        />
-        <Route
-          path="/englishExpressions"
+          path="/game"
           element={<Game />}
         />
       </Routes>
