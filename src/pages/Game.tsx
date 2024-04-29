@@ -3,10 +3,10 @@ import axios from 'axios';
 import ExpressionType from '../types.ts';
 import Score from '../components/Score.tsx';
 import ProgressBar from '../components/ProgressBar.tsx';
-import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../app/store.ts';
 import { exampleExpressionsData } from '../exampleExpressions.ts';
+import { useNavigate } from 'react-router-dom';
 
 const Game = () => {
   const [loading, setLoading] = useState(true);
@@ -23,12 +23,16 @@ const Game = () => {
   );
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [isClickable, setIsClickable] = useState(true);
+
+  const navigate = useNavigate();
 
   const isFontSizeLarge: boolean = useSelector(
     (state: RootState) => state.accessibility.isFontsizeLarge
   );
 
-  const location = useLocation();
+  const url = import.meta.env.VITE_APPLICATION_URL;
+  const gameMode = useSelector((state: RootState) => state.gameMode.gameMode);
 
   const rightAnswerRef = useRef<HTMLDivElement>(null);
   const falseAnswerOneRef = useRef<HTMLDivElement>(null);
@@ -43,23 +47,33 @@ const Game = () => {
     }
   };
 
-  const [isClickable, setIsClickable] = useState(true);
+  // if no game mode choosen redirect user
+  useEffect(() => {
+    if (!gameMode) {
+      navigate('/chooseLanguage', { replace: true });
+    }
+  }, [navigate, gameMode]);
 
-  // TODO: refactor ( the base url should come from the environment )
-  const expressionsType = location.pathname.split('/')[1];
-  const ref = useRef(`http://localhost:8080/${expressionsType}`);
-  const url = ref.current;
-  
   const getTenRandomExpressions = async () => {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(`${url}/expressions?game=${gameMode}`);
+      console.log('Response ', response.data);
       setExpressions(response.data);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+      console.log('Fall back to hardcoded data');
+      setExpressions(exampleExpressionsData);
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    //getTenRandomExpressions();
+    setLoading(false);
+    // TODO: cleanup
+    // TODO: Handle error
+  }, []);
+
   const getDelayForAnswer = (answerIndex: number) => {
     const orderIndex = randomNumbersRef.current.indexOf(answerIndex);
     switch (orderIndex) {
@@ -111,13 +125,6 @@ const Game = () => {
     return randomNumbers;
   };
   const randomNumbersRef = useRef(getRandomNumbers());
-
-  useEffect(() => {
-    //getTenRandomExpressions();
-    setLoading(false);
-    // TODO: cleanup
-    // TODO: Handle error
-  }, []);
 
   const resetGame = () => {
     setLoading(true);
@@ -189,7 +196,7 @@ const Game = () => {
             }`}
           >
             <h2 className={isFontSizeLarge ? 'text-4xl my-6' : 'text-2xl my-6'}>
-              {activeExpression.expression}
+              {activeExpression?.expression}
             </h2>
             <div
               ref={rightAnswerRef}
@@ -208,7 +215,7 @@ const Game = () => {
               }`}
             >
               <p className={isFontSizeLarge ? 'text-xl' : 'text-md'}>
-                {activeExpression.rightAnswer}
+                {activeExpression?.rightAnswer}
               </p>
             </div>
 
@@ -229,7 +236,7 @@ const Game = () => {
               }`}
             >
               <p className={isFontSizeLarge ? 'text-xl' : 'text-md'}>
-                {activeExpression.falseAnswerOne}
+                {activeExpression?.falseAnswerOne}
               </p>
             </div>
 
@@ -250,7 +257,7 @@ const Game = () => {
               }`}
             >
               <p className={isFontSizeLarge ? 'text-xl' : 'text-md'}>
-                {activeExpression.falseAnswerTwo}
+                {activeExpression?.falseAnswerTwo}
               </p>
             </div>
           </div>
