@@ -30,8 +30,6 @@ const Game = () => {
 
   const location = useLocation();
 
-  const expressionsType = location.pathname.split('/')[1];
-
   const rightAnswerRef = useRef<HTMLDivElement>(null);
   const falseAnswerOneRef = useRef<HTMLDivElement>(null);
   const falseAnswerTwoRef = useRef<HTMLDivElement>(null);
@@ -47,14 +45,11 @@ const Game = () => {
 
   const [isClickable, setIsClickable] = useState(true);
 
-  // TODO: refactor ( string interpolation )
-  let url = '';
-  if (expressionsType === 'spanishExpressions') {
-    url = 'http://localhost:8080/getSpanishExpressions';
-  } else if (expressionsType === 'englishExpressions') {
-    url = 'http://localhost:8080/getEnglishExpressions';
-  }
-
+  // TODO: refactor ( the base url should come from the environment )
+  const expressionsType = location.pathname.split('/')[1];
+  const ref = useRef(`http://localhost:8080/${expressionsType}`);
+  const url = ref.current;
+  
   const getTenRandomExpressions = async () => {
     try {
       const response = await axios.get(url);
