@@ -4,13 +4,13 @@ import ExpressionType from '../types.ts';
 import Score from '../components/Score.tsx';
 import ProgressBar from '../components/ProgressBar.tsx';
 import { useSelector } from 'react-redux';
-import { RootState } from '../app/store.ts';
+import { selectGameMode, selectIsFontSizeLarge } from '../app/store.ts';
 import { exampleExpressionsData } from '../exampleExpressions.ts';
 import { useNavigate } from 'react-router-dom';
 import { getRandomNumbers } from '../utils/functions.ts';
+import { serverBaseUrl as url } from '../config.ts';
 
 const Game = () => {
-
   const navigate = useNavigate();
 
   const randomNumbersRef = useRef(getRandomNumbers());
@@ -31,20 +31,15 @@ const Game = () => {
   const [score, setScore] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
 
+  const isFontSizeLarge = useSelector(selectIsFontSizeLarge);
+  const gameMode = useSelector(selectGameMode);
 
-
-  const isFontSizeLarge: boolean = useSelector(
-    (state: RootState) => state.accessibility.isFontsizeLarge
-  );
-
-  const url = import.meta.env.VITE_APPLICATION_URL;
-  const gameMode = useSelector((state: RootState) => state.gameMode.gameMode);
-    // if no game mode choosen redirect user
-    useEffect(() => {
-      if (!gameMode) {
-        navigate('/chooseLanguage', { replace: true });
-      }
-    }, [navigate, gameMode]);
+  // if no game mode choosen redirect user
+  useEffect(() => {
+    if (!gameMode) {
+      navigate('/chooseLanguage', { replace: true });
+    }
+  }, [navigate, gameMode]);
 
   const rightAnswerRef = useRef<HTMLDivElement>(null);
   const falseAnswerOneRef = useRef<HTMLDivElement>(null);
@@ -119,8 +114,6 @@ const Game = () => {
   }, [activeExpressionIndex]);
 
   const activeExpression = expressions[activeExpressionIndex];
-
- 
 
   const resetGame = () => {
     setLoading(true);
