@@ -20,3 +20,23 @@ export function getRandomNumbers(
   }
   return randomNumbers;
 }
+
+/**
+ * Determines the delay before showing an answer based on its order index.
+ * @param answerIndex The index of the current answer.
+ * @param delays An array of delays corresponding to the order indexes.
+ * @returns The delay in milliseconds.
+ */
+export const getDelayForAnswer = (answerIndex: number, randomNumbers: number[]): number => {
+    const orderIndex = randomNumbers.indexOf(answerIndex);
+    switch (orderIndex) {
+      case 0:
+        return 500; // First to appear
+      case 1:
+        return 1000; // Second to appear
+      case 2:
+        return 1500; // Third to appear
+      default:
+        return 0; // No delay if index not found
+    }
+  };

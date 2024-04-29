@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectGameMode, selectIsFontSizeLarge } from '../app/store.ts';
 import { exampleExpressionsData } from '../exampleExpressions.ts';
 import { useNavigate } from 'react-router-dom';
-import { getRandomNumbers } from '../utils/functions.ts';
+import { getDelayForAnswer, getRandomNumbers } from '../utils/functions.ts';
 import { serverBaseUrl as url } from '../config.ts';
 
 const Game = () => {
@@ -74,20 +74,6 @@ const Game = () => {
     // TODO: Handle error
   }, []);
 
-  const getDelayForAnswer = (answerIndex: number) => {
-    const orderIndex = randomNumbersRef.current.indexOf(answerIndex);
-    switch (orderIndex) {
-      case 0:
-        return 500; // First to appear
-      case 1:
-        return 1000; // Second to appear
-      case 2:
-        return 1500; // Third to appear
-      default:
-        return 0;
-    }
-  };
-
   useEffect(() => {
     setShowAnswerOne(false);
     setShowAnswerTwo(false);
@@ -95,15 +81,15 @@ const Game = () => {
 
     const timer1 = setTimeout(
       () => setShowAnswerOne(true),
-      getDelayForAnswer(0)
+      getDelayForAnswer(0, randomNumbersRef.current)
     );
     const timer2 = setTimeout(
       () => setShowAnswerTwo(true),
-      getDelayForAnswer(1)
+      getDelayForAnswer(1, randomNumbersRef.current)
     );
     const timer3 = setTimeout(
       () => setShowAnswerThree(true),
-      getDelayForAnswer(2)
+      getDelayForAnswer(2, randomNumbersRef.current)
     );
 
     return () => {
