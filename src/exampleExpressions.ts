@@ -6,7 +6,7 @@ interface Expression {
   falseAnswerTwo: string;
 }
 
-export const exampleExpressionsData: Expression[] = [
+export const spanishExampleExpressionsData: Expression[] = [
   {
     id: 1,
     expression: 'Meter la pata',
@@ -78,3 +78,78 @@ export const exampleExpressionsData: Expression[] = [
     falseAnswerTwo: 'To have a good relation with your family',
   },
 ];
+
+export const englishExampleExpressionsData: Expression[] = [
+  {
+    id: 11,
+    expression: 'Piece of cake',
+    rightAnswer: 'Algo fácil de hacer',
+    falseAnswerOne: 'Ser un trozo de tarta',
+    falseAnswerTwo: 'Algo complicado de hacer',
+  },
+  {
+    id: 12,
+    expression: 'Cut to the chase',
+    rightAnswer: 'Ir a lo importante',
+    falseAnswerOne: 'Hacer una pausa',
+    falseAnswerTwo: 'Dejar de correr',
+  },
+  {
+    id: 13,
+    expression: 'To cost an arm and a leg',
+    rightAnswer: 'Cuando algo es muy caro',
+    falseAnswerOne: 'Cuando algo te cuesta un brazo y una pierna',
+    falseAnswerTwo: 'Cuando algo necesita un esfuerzo físico',
+  },
+  {
+    id: 14,
+    expression: 'To miss the boat',
+    rightAnswer: 'Perder la oportunidad',
+    falseAnswerOne: 'Perder el barco',
+    falseAnswerTwo: 'Perder el rumbo de la conversación',
+  },
+  {
+    id: 15,
+    expression: 'Once in a blue moon',
+    rightAnswer: 'Muy raramente',
+    falseAnswerOne: 'Cada vez que la luna es azul',
+    falseAnswerTwo: 'Con mucha frecuencia',
+  },
+  {
+    id: 16,
+    expression: 'To give someone the cold shoulder',
+    rightAnswer: 'Ignorar a alguien',
+    falseAnswerOne: 'Darle a alguien con el hombro frío',
+    falseAnswerTwo: 'Darle especial importancia a alguien',
+  },
+  {
+    id: 17,
+    expression: 'To feel blue',
+    rightAnswer: 'Estar triste',
+    falseAnswerOne: 'Ser azul',
+    falseAnswerTwo: 'Estar eufórico',
+  },
+  {
+    id: 18,
+    expression: 'Speak of the devil',
+    rightAnswer: 'Cuando hablas de alguien y aparece',
+    falseAnswerOne: 'Cuando hablas del diablo',
+    falseAnswerTwo: 'Cuando te pasa algo malo',
+  },
+  {
+    id: 19,
+    expression: 'To not be rocket science',
+    rightAnswer: 'Cuando una tarea no es difícil',
+    falseAnswerOne: 'Cuando algo no es científico',
+    falseAnswerTwo: 'Cuando alguien no tiene un buen físico',
+  },
+  {
+    id: 20,
+    expression: 'Break a leg!',
+    rightAnswer: 'Se utiliza para desear suerte',
+    falseAnswerOne: 'Cuando alguien se rompe una pierna',
+    falseAnswerTwo: 'Cuando pasa algo malo',
+  },
+];
+
+

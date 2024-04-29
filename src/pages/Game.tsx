@@ -1,14 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import ExpressionType from '../types.ts';
 import Score from '../components/Score.tsx';
 import ProgressBar from '../components/ProgressBar.tsx';
 import { useSelector } from 'react-redux';
 import { selectGameMode, selectIsFontSizeLarge } from '../app/store.ts';
-import { exampleExpressionsData } from '../exampleExpressions.ts';
+import {
+  spanishExampleExpressionsData,
+  englishExampleExpressionsData,
+} from '../exampleExpressions.ts';
 import { useNavigate } from 'react-router-dom';
-import { getDelayForAnswer, getRandomNumbers } from '../utils/functions.ts';
-import { serverBaseUrl as url } from '../config.ts';
+import {
+  getACertainNumberOfExpressionsElement,
+  getDelayForAnswer,
+  getRandomNumbers,
+} from '../utils/functions.ts';
+//import { serverBaseUrl as url } from '../config.ts';
+import { GameMode } from '../features/game/gameModeSlice.ts';
+import { numberOfExpressions } from '../config.ts';
 
 const Game = () => {
   const navigate = useNavigate();
@@ -24,9 +33,7 @@ const Game = () => {
   const [showAnswerOne, setShowAnswerOne] = useState(false);
   const [showAnswerTwo, setShowAnswerTwo] = useState(false);
   const [showAnswerThree, setShowAnswerThree] = useState(false);
-  const [expressions, setExpressions] = useState<ExpressionType[]>(
-    exampleExpressionsData
-  );
+  const [expressions, setExpressions] = useState<ExpressionType[]>([]);
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
@@ -54,25 +61,23 @@ const Game = () => {
     }
   };
 
-  const getTenRandomExpressions = async () => {
-    try {
-      const response = await axios.get(`${url}/expressions?game=${gameMode}`);
-      console.log('Response ', response.data);
-      setExpressions(response.data);
-    } catch (error) {
-      console.log(error);
-      console.log('Fall back to hardcoded data');
-      setExpressions(exampleExpressionsData);
+  useEffect(() => {
+    if (gameMode === GameMode.EnglishToSpanish) {
+      const shuffeledExpressions = getACertainNumberOfExpressionsElement(
+        englishExampleExpressionsData,
+        numberOfExpressions
+      );
+      setExpressions(shuffeledExpressions);
+      setLoading(false);
+    } else {
+      const shuffeledExpressions = getACertainNumberOfExpressionsElement(
+        spanishExampleExpressionsData,
+        numberOfExpressions
+      );
+      setExpressions(shuffeledExpressions);
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    //getTenRandomExpressions();
-    setLoading(false);
-    // TODO: cleanup
-    // TODO: Handle error
-  }, []);
+  }, [isGameFinished, gameMode]);
 
   useEffect(() => {
     setShowAnswerOne(false);
@@ -103,7 +108,6 @@ const Game = () => {
 
   const resetGame = () => {
     setLoading(true);
-    getTenRandomExpressions();
     setIsGameFinished(false);
     setScore(0);
     setActiveExpressionIndex(0);
@@ -126,7 +130,8 @@ const Game = () => {
       setIsRightAnswerChosen(true);
       setScore(score + 1);
     }
-    if (activeExpressionIndex === 4) {
+    // TODO: make number of expressions dinamic
+    if (activeExpressionIndex === numberOfExpressions - 1) {
       setTimeout(() => {
         setIsGameFinished(true);
       }, 2000);
@@ -148,7 +153,7 @@ const Game = () => {
     }, 2000);
   };
 
-  const progress = (activeExpressionIndex / expressions.length) * 200;
+  const progress = (activeExpressionIndex / numberOfExpressions) * 100;
 
   const handleActiveEexpressionIncrement = () => {
     setActiveExpressionIndex((curr) => curr + 1);
