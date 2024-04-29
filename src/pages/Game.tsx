@@ -7,8 +7,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../app/store.ts';
 import { exampleExpressionsData } from '../exampleExpressions.ts';
 import { useNavigate } from 'react-router-dom';
+import { getRandomNumbers } from '../utils/functions.ts';
 
 const Game = () => {
+
+  const navigate = useNavigate();
+
+  const randomNumbersRef = useRef(getRandomNumbers());
+
   const [loading, setLoading] = useState(true);
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [isRightAnswerChosen, setIsRightAnswerChosen] = useState(false);
@@ -25,7 +31,7 @@ const Game = () => {
   const [score, setScore] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
 
-  const navigate = useNavigate();
+
 
   const isFontSizeLarge: boolean = useSelector(
     (state: RootState) => state.accessibility.isFontsizeLarge
@@ -33,6 +39,12 @@ const Game = () => {
 
   const url = import.meta.env.VITE_APPLICATION_URL;
   const gameMode = useSelector((state: RootState) => state.gameMode.gameMode);
+    // if no game mode choosen redirect user
+    useEffect(() => {
+      if (!gameMode) {
+        navigate('/chooseLanguage', { replace: true });
+      }
+    }, [navigate, gameMode]);
 
   const rightAnswerRef = useRef<HTMLDivElement>(null);
   const falseAnswerOneRef = useRef<HTMLDivElement>(null);
@@ -46,13 +58,6 @@ const Game = () => {
       handleChoice(choice);
     }
   };
-
-  // if no game mode choosen redirect user
-  useEffect(() => {
-    if (!gameMode) {
-      navigate('/chooseLanguage', { replace: true });
-    }
-  }, [navigate, gameMode]);
 
   const getTenRandomExpressions = async () => {
     try {
@@ -114,17 +119,8 @@ const Game = () => {
   }, [activeExpressionIndex]);
 
   const activeExpression = expressions[activeExpressionIndex];
-  const getRandomNumbers = () => {
-    const randomNumbers: number[] = [];
-    while (randomNumbers.length < 3) {
-      const randomNumber = Math.floor(Math.random() * 3);
-      if (!randomNumbers.includes(randomNumber)) {
-        randomNumbers.push(randomNumber);
-      }
-    }
-    return randomNumbers;
-  };
-  const randomNumbersRef = useRef(getRandomNumbers());
+
+ 
 
   const resetGame = () => {
     setLoading(true);
