@@ -12,12 +12,13 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {
   getACertainNumberOfExpressionsElement,
-  getDelayForAnswer,
   getRandomNumbers,
+  shuffleArray,
 } from '../utils/functions.ts';
 //import { serverBaseUrl as url } from '../config.ts';
 import { GameMode } from '../features/game/gameModeSlice.ts';
 import { numberOfExpressions } from '../config.ts';
+import Choice from '../components/Choice.tsx';
 
 const Game = () => {
   const navigate = useNavigate();
@@ -26,13 +27,7 @@ const Game = () => {
 
   const [loading, setLoading] = useState(true);
   const [isGameFinished, setIsGameFinished] = useState(false);
-  const [isRightAnswerChosen, setIsRightAnswerChosen] = useState(false);
-  const [isWrongAnswerOneChosen, setIsWrongAnswerOneChosen] = useState(false);
-  const [isWrongAnswerTwoChosen, setIsWrongAnswerTwoChosen] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
-  const [showAnswerOne, setShowAnswerOne] = useState(false);
-  const [showAnswerTwo, setShowAnswerTwo] = useState(false);
-  const [showAnswerThree, setShowAnswerThree] = useState(false);
   const [expressions, setExpressions] = useState<ExpressionType[]>([]);
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -48,16 +43,12 @@ const Game = () => {
     }
   }, [navigate, gameMode]);
 
-  const rightAnswerRef = useRef<HTMLDivElement>(null);
-  const falseAnswerOneRef = useRef<HTMLDivElement>(null);
-  const falseAnswerTwoRef = useRef<HTMLDivElement>(null);
-
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    choice: string
+    isThisTheCorrectAnswer: boolean
   ) => {
     if (event.key === 'Enter') {
-      handleChoice(choice);
+      handleChoice(isThisTheCorrectAnswer);
     }
   };
 
@@ -79,39 +70,37 @@ const Game = () => {
     }
   }, [isGameFinished, gameMode]);
 
-  useEffect(() => {
-    setShowAnswerOne(false);
-    setShowAnswerTwo(false);
-    setShowAnswerThree(false);
-
-    const timer1 = setTimeout(
-      () => setShowAnswerOne(true),
-      getDelayForAnswer(0, randomNumbersRef.current)
-    );
-    const timer2 = setTimeout(
-      () => setShowAnswerTwo(true),
-      getDelayForAnswer(1, randomNumbersRef.current)
-    );
-    const timer3 = setTimeout(
-      () => setShowAnswerThree(true),
-      getDelayForAnswer(2, randomNumbersRef.current)
-    );
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
-  }, [activeExpressionIndex]);
-
   const activeExpression = expressions[activeExpressionIndex];
 
-  const resetGame = () => {
+  const arrayOfNumbers = [1, 2, 3];
+  const shuffledOrders = shuffleArray(arrayOfNumbers);
+
+  const activeExpressionChoices = [
+    {
+      answer: activeExpression?.rightAnswer,
+      order: shuffledOrders[0], // Assign order from shuffled array
+      correct: true,
+    },
+    {
+      answer: activeExpression?.falseAnswerOne,
+      order: shuffledOrders[1], // Assign order from shuffled array
+      correct: false,
+    },
+    {
+      answer: activeExpression?.falseAnswerTwo,
+      order: shuffledOrders[2], // Assign order from shuffled array
+      correct: false,
+    },
+  ];
+
+  activeExpressionChoices.sort((a, b) => a.order - b.order);
+
+  function resetGame() {
     setLoading(true);
     setIsGameFinished(false);
     setScore(0);
     setActiveExpressionIndex(0);
-  };
+  }
 
   useEffect(() => {
     setFadeIn(true);
@@ -121,44 +110,40 @@ const Game = () => {
     return () => clearTimeout(timer);
   }, [activeExpressionIndex]);
 
-  const handleChoice = (choice: string) => {
-    if (!isClickable) {
-      return;
-    }
-    setIsClickable(false);
-    if (choice === activeExpression.rightAnswer) {
-      setIsRightAnswerChosen(true);
-      setScore(score + 1);
-    }
-    // TODO: make number of expressions dinamic
-    if (activeExpressionIndex === numberOfExpressions - 1) {
-      setTimeout(() => {
+  useEffect(() => {
+    function handleFinish() {
+      if (numberOfExpressions === activeExpressionIndex) {
         setIsGameFinished(true);
-      }, 2000);
+      }
     }
-    if (choice === activeExpression.falseAnswerOne) {
-      setIsWrongAnswerOneChosen(true);
-      setIsRightAnswerChosen(true);
-    }
-    if (choice === activeExpression.falseAnswerTwo) {
-      setIsWrongAnswerTwoChosen(true);
-      setIsRightAnswerChosen(true);
-    }
-    setTimeout(() => {
-      setIsRightAnswerChosen(false);
-      setIsWrongAnswerOneChosen(false);
-      setIsWrongAnswerTwoChosen(false);
-      handleActiveEexpressionIncrement();
+    handleFinish();
+  }, [activeExpressionIndex]);
+
+  function handleChoice(correctAnswerChosen: boolean) {
+    if (correctAnswerChosen) {
+      setIsClickable(false);
+      setScore((prev) => prev + 1);
+      console.log('The correct answer has been chosen');
+      setTimeout(() => {
+        handleActiveExpressionIncrement();
+      }, 1000);
       setIsClickable(true);
-    }, 2000);
-  };
+    } else {
+      setIsClickable(false);
+      console.log('Incorrect');
+      setTimeout(() => {
+        handleActiveExpressionIncrement();
+      }, 1000);
+      setIsClickable(true);
+    }
+  }
 
   const progress = (activeExpressionIndex / numberOfExpressions) * 100;
 
-  const handleActiveEexpressionIncrement = () => {
+  function handleActiveExpressionIncrement() {
     setActiveExpressionIndex((curr) => curr + 1);
     randomNumbersRef.current = getRandomNumbers();
-  };
+  }
 
   return (
     <div className="h-full relative flex justify-start items-center flex-col gap-3 font-nova overflow-x-hidden mt-3  mx-3">
@@ -178,71 +163,23 @@ const Game = () => {
             <h2 className={isFontSizeLarge ? 'text-4xl my-6' : 'text-2xl my-6'}>
               {activeExpression?.expression}
             </h2>
-            <div
-              ref={rightAnswerRef}
-              style={{ order: randomNumbersRef.current[0] }}
-              tabIndex={randomNumbersRef.current[0] + 5}
-              onClick={() => handleChoice(activeExpression.rightAnswer)}
-              onKeyDown={(event) =>
-                handleKeyPress(event, activeExpression.rightAnswer)
-              }
-              className={`border-2 min-w-[200px] md:min-w-[500px] w-full flex justify-center items-center p-3 rounded-lg cursor-pointer transition-all duration-100 ${
-                showAnswerOne
-                  ? 'opacity-100 translate-x-0'
-                  : 'opacity-0 -translate-x-full'
-              } ${
-                isRightAnswerChosen ? 'border-green-500' : 'border-gray-200'
-              }`}
-            >
-              <p className={isFontSizeLarge ? 'text-xl' : 'text-md'}>
-                {activeExpression?.rightAnswer}
-              </p>
-            </div>
-
-            <div
-              ref={falseAnswerOneRef}
-              style={{ order: randomNumbersRef.current[1] }}
-              tabIndex={randomNumbersRef.current[1] + 5}
-              onClick={() => handleChoice(activeExpression.falseAnswerOne)}
-              onKeyDown={(event) =>
-                handleKeyPress(event, activeExpression.rightAnswer)
-              }
-              className={`border-2 min-w-[200px] md:min-w-[500px] w-full flex justify-center items-center p-3 rounded-lg cursor-pointer transition-all duration-100 ${
-                showAnswerTwo
-                  ? 'opacity-100 translate-x-0'
-                  : 'opacity-0 -translate-x-full'
-              } ${
-                isWrongAnswerOneChosen ? 'border-red-500' : 'border-gray-200'
-              }`}
-            >
-              <p className={isFontSizeLarge ? 'text-xl' : 'text-md'}>
-                {activeExpression?.falseAnswerOne}
-              </p>
-            </div>
-
-            <div
-              ref={falseAnswerTwoRef}
-              style={{ order: randomNumbersRef.current[2] }}
-              tabIndex={randomNumbersRef.current[2] + 5}
-              onClick={() => handleChoice(activeExpression.falseAnswerTwo)}
-              onKeyDown={(event) =>
-                handleKeyPress(event, activeExpression.rightAnswer)
-              }
-              className={`border-2 min-w-[200px] md:min-w-[500px] w-full flex justify-center items-center p-3 rounded-lg cursor-pointer transition-all duration-100 ${
-                showAnswerThree
-                  ? 'opacity-100 translate-x-0'
-                  : 'opacity-0 -translate-x-full'
-              } ${
-                isWrongAnswerTwoChosen ? 'border-red-500' : 'border-gray-200'
-              }`}
-            >
-              <p className={isFontSizeLarge ? 'text-xl' : 'text-md'}>
-                {activeExpression?.falseAnswerTwo}
-              </p>
+            <div className="flex flex-col gap-3 w-full overflow-hidden">
+              {activeExpressionChoices.map((choice) => (
+                <Choice
+                  key={choice.answer}
+                  order={choice.order}
+                  handleChoice={handleChoice}
+                  handleKeyPress={handleKeyPress}
+                  isClickable={isClickable}
+                  content={choice.answer}
+                  isThisTheCorrectAnswer={choice.correct}
+                />
+              ))}
             </div>
           </div>
         </>
       )}
+      {/* show score */}
       {isGameFinished && (
         <Score
           score={score}
