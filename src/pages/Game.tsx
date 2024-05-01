@@ -102,6 +102,7 @@ const Game = () => {
     setActiveExpressionIndex(0);
   }
 
+  // create fade in anmation for header
   useEffect(() => {
     setFadeIn(true);
     const timer = setTimeout(() => {
@@ -110,6 +111,7 @@ const Game = () => {
     return () => clearTimeout(timer);
   }, [activeExpressionIndex]);
 
+  // show score when it is appropriate
   useEffect(() => {
     function handleFinish() {
       if (numberOfExpressions === activeExpressionIndex) {
@@ -119,6 +121,7 @@ const Game = () => {
     handleFinish();
   }, [activeExpressionIndex]);
 
+  
   function handleChoice(correctAnswerChosen: boolean) {
     if (correctAnswerChosen) {
       setIsClickable(false);
