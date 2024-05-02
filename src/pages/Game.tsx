@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 //import axios from 'axios';
 import ExpressionType from '../types.ts';
 import Score from '../components/Score.tsx';
@@ -23,7 +23,7 @@ import Choice from '../components/Choice.tsx';
 const Game = () => {
   const navigate = useNavigate();
 
-  const randomNumbersRef = useRef(getRandomNumbers());
+
 
   const [loading, setLoading] = useState(true);
   const [isGameFinished, setIsGameFinished] = useState(false);
@@ -113,6 +113,7 @@ const Game = () => {
 
   // show score when it is appropriate
   useEffect(() => {
+    getRandomNumbers()
     function handleFinish() {
       if (numberOfExpressions === activeExpressionIndex) {
         setIsGameFinished(true);
@@ -125,9 +126,9 @@ const Game = () => {
   function handleChoice(correctAnswerChosen: boolean) {
     if (correctAnswerChosen) {
       setIsClickable(false);
-      setScore((prev) => prev + 1);
       console.log('The correct answer has been chosen');
       setTimeout(() => {
+        setScore((prev) => prev + 1);
         handleActiveExpressionIncrement();
       }, 1000);
       setIsClickable(true);
@@ -145,7 +146,6 @@ const Game = () => {
 
   function handleActiveExpressionIncrement() {
     setActiveExpressionIndex((curr) => curr + 1);
-    randomNumbersRef.current = getRandomNumbers();
   }
 
   return (
@@ -169,7 +169,7 @@ const Game = () => {
             <div className="flex flex-col gap-3 w-full overflow-hidden">
               {activeExpressionChoices.map((choice) => (
                 <Choice
-                  key={choice.answer}
+                  key={`${choice.answer}-choice`}
                   order={choice.order}
                   handleChoice={handleChoice}
                   handleKeyPress={handleKeyPress}
