@@ -44,10 +44,10 @@ const Game = () => {
 
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    isThisTheCorrectAnswer: boolean
+    answerChosen: string
   ) => {
     if (event.key === 'Enter') {
-      handleChoice(isThisTheCorrectAnswer);
+      handleChoice(answerChosen);
     }
   };
 
@@ -126,8 +126,10 @@ const Game = () => {
     handleFinish();
   }, [activeExpressionIndex]);
 
-  function handleChoice(correctAnswerChosen: boolean) {
-    if (correctAnswerChosen) {
+  const activeExpression = expressions[activeExpressionIndex];
+
+  function handleChoice(answerChosen: string) {
+    if (answerChosen === activeExpression?.rightAnswer) {
       setIsClickable(false);
       console.log('The correct answer has been chosen');
       setTimeout(() => {
@@ -178,7 +180,6 @@ const Game = () => {
                   handleKeyPress={handleKeyPress}
                   isClickable={isClickable}
                   content={choice.answer}
-                  isThisTheCorrectAnswer={choice.correct}
                 />
               ))}
             </div>

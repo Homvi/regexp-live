@@ -3,13 +3,12 @@ import { selectIsFontSizeLarge } from '../app/store';
 import { useEffect, useState } from 'react';
 
 interface ChoiceProps {
-  handleChoice: (correctAnswerChosen: boolean) => void;
+  handleChoice: (answerChosen: string) => void;
   handleKeyPress: (
     event: React.KeyboardEvent<HTMLDivElement>,
-    isThisTheCorrectAnswer: boolean
+    answerChosen: string
   ) => void;
   content: string;
-  isThisTheCorrectAnswer: boolean;
   isClickable: boolean;
   order: number;
 }
@@ -18,7 +17,6 @@ const Choice: React.FC<ChoiceProps> = ({
   handleChoice,
   handleKeyPress,
   content,
-  isThisTheCorrectAnswer,
   isClickable,
   order,
 }) => {
@@ -37,10 +35,10 @@ const Choice: React.FC<ChoiceProps> = ({
     <div
       onClick={() => {
         if (isClickable) {
-          handleChoice(isThisTheCorrectAnswer);
+          handleChoice(content);
         }
       }}
-      onKeyDown={(e) => handleKeyPress(e, isThisTheCorrectAnswer)}
+      onKeyDown={(e) => handleKeyPress(e, content)}
       className={` 
       ${isVisible ? 'opacity-100' : 'opacity-0'}
 
