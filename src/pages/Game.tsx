@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 //import axios from 'axios';
-import ExpressionType from '../types.ts';
+import { ExpressionType, ChoiceType } from '../types.ts';
 import Score from '../components/Score.tsx';
 import ProgressBar from '../components/ProgressBar.tsx';
 import { useSelector } from 'react-redux';
@@ -30,7 +30,7 @@ const Game = () => {
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
   const [activeExpressionChoices, setActiveExpressionChoices] = useState<
-    Choice[]
+  ChoiceType[]
   >([]);
 
   const score = useRef(0);
@@ -104,7 +104,7 @@ const Game = () => {
   function handleChoice(answerChosen: string) {
     if (answerChosen === activeExpression?.rightAnswer) {
       setIsClickable(false);
-      highlightCorrectChoice();
+      highlightChoices(answerChosen);
       console.log('The correct answer has been chosen');
       setTimeout(() => {
         score.current++;
@@ -114,20 +114,14 @@ const Game = () => {
     } else {
       setIsClickable(false);
       console.log('Incorrect');
-      highlightWrongAndCorrectChoices(answerChosen);
+      highlightChoices(answerChosen);
+      answerChosen;
       setTimeout(() => {
         handleActiveExpressionIncrement();
       }, 1000);
       setIsClickable(true);
     }
   }
-  // Functions
-  type Choice = {
-    answer: string;
-    order: number;
-    correct: boolean;
-    highlight: boolean;
-  };
 
   function getChoicesInShuffledOrder(activeExpression: ExpressionType) {
     const shuffledOrders = shuffleArray([1, 2, 3]);
@@ -159,15 +153,7 @@ const Game = () => {
     return activeExpressionChoices;
   }
 
-  function highlightCorrectChoice() {
-    setActiveExpressionChoices((prevChoices) =>
-      prevChoices.map((choice) =>
-        choice.correct ? { ...choice, highlight: true } : choice
-      )
-    );
-  }
-
-  function highlightWrongAndCorrectChoices(answerChosen: string) {
+  function highlightChoices(answerChosen: string) {
     setActiveExpressionChoices((prevChoices) =>
       prevChoices.map((choice) =>
         choice.answer === answerChosen || choice.correct
