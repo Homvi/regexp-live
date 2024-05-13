@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../app/store.ts';
 
 interface ScoreProps {
-  score: number;
+  score:number;
   resetGame: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 

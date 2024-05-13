@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 //import axios from 'axios';
 import ExpressionType from '../types.ts';
 import Score from '../components/Score.tsx';
@@ -23,15 +23,15 @@ import Choice from '../components/Choice.tsx';
 const Game = () => {
   const navigate = useNavigate();
 
-
-
+  // TODO: handle status in redux
   const [loading, setLoading] = useState(true);
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
   const [expressions, setExpressions] = useState<ExpressionType[]>([]);
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
-  const [score, setScore] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
+
+  const score = useRef(0);
 
   const isFontSizeLarge = useSelector(selectIsFontSizeLarge);
   const gameMode = useSelector(selectGameMode);
@@ -98,7 +98,7 @@ const Game = () => {
   function resetGame() {
     setLoading(true);
     setIsGameFinished(false);
-    setScore(0);
+    score.current = 0;
     setActiveExpressionIndex(0);
   }
 
@@ -113,7 +113,7 @@ const Game = () => {
 
   // show score when it is appropriate
   useEffect(() => {
-    getRandomNumbers()
+    getRandomNumbers();
     function handleFinish() {
       if (numberOfExpressions === activeExpressionIndex) {
         setIsGameFinished(true);
@@ -122,13 +122,12 @@ const Game = () => {
     handleFinish();
   }, [activeExpressionIndex]);
 
-  
   function handleChoice(correctAnswerChosen: boolean) {
     if (correctAnswerChosen) {
       setIsClickable(false);
       console.log('The correct answer has been chosen');
       setTimeout(() => {
-        setScore((prev) => prev + 1);
+        score.current++;
         handleActiveExpressionIncrement();
       }, 1000);
       setIsClickable(true);
@@ -185,7 +184,7 @@ const Game = () => {
       {/* show score */}
       {isGameFinished && (
         <Score
-          score={score}
+          score={score.current}
           resetGame={resetGame}
         />
       )}
