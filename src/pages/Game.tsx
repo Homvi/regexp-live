@@ -29,6 +29,9 @@ const Game = () => {
   const [expressions, setExpressions] = useState<ExpressionType[]>([]);
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
+  const [activeExpressionChoices, setActiveExpressionChoices] = useState<
+    Choice[]
+  >([]);
 
   const score = useRef(0);
 
@@ -51,6 +54,7 @@ const Game = () => {
     }
   };
 
+  // get expressions, shuffle them and set as a state
   useEffect(() => {
     if (gameMode === GameMode.EnglishToSpanish) {
       const shuffeledExpressions = getACertainNumberOfExpressionsElement(
@@ -68,37 +72,6 @@ const Game = () => {
       setLoading(false);
     }
   }, [isGameFinished, gameMode]);
-
-  function getChoicesInShuffledOrder(activeExpression: ExpressionType) {
-    const shuffledOrders = shuffleArray([1, 2, 3]);
-
-    const activeExpressionChoices = [
-      {
-        answer: activeExpression?.rightAnswer,
-        order: shuffledOrders[0],
-        correct: true,
-      },
-      {
-        answer: activeExpression?.falseAnswerOne,
-        order: shuffledOrders[1],
-        correct: false,
-      },
-      {
-        answer: activeExpression?.falseAnswerTwo,
-        order: shuffledOrders[2],
-        correct: false,
-      },
-    ];
-
-    // sort activeExpressionChoices by order number
-    activeExpressionChoices.sort((a, b) => a.order - b.order);
-
-    return activeExpressionChoices;
-  }
-
-  const activeExpressionChoices = getChoicesInShuffledOrder(
-    expressions[activeExpressionIndex]
-  );
 
   function resetGame() {
     setLoading(true);
@@ -131,6 +104,7 @@ const Game = () => {
   function handleChoice(answerChosen: string) {
     if (answerChosen === activeExpression?.rightAnswer) {
       setIsClickable(false);
+      highlightCorrectChoice();
       console.log('The correct answer has been chosen');
       setTimeout(() => {
         score.current++;
@@ -140,12 +114,75 @@ const Game = () => {
     } else {
       setIsClickable(false);
       console.log('Incorrect');
+      highlightWrongAndCorrectChoices(answerChosen);
       setTimeout(() => {
         handleActiveExpressionIncrement();
       }, 1000);
       setIsClickable(true);
     }
   }
+  // Functions
+  type Choice = {
+    answer: string;
+    order: number;
+    correct: boolean;
+    highlight: boolean;
+  };
+
+  function getChoicesInShuffledOrder(activeExpression: ExpressionType) {
+    const shuffledOrders = shuffleArray([1, 2, 3]);
+
+    const activeExpressionChoices = [
+      {
+        answer: activeExpression?.rightAnswer,
+        order: shuffledOrders[0],
+        correct: true,
+        highlight: false,
+      },
+      {
+        answer: activeExpression?.falseAnswerOne,
+        order: shuffledOrders[1],
+        correct: false,
+        highlight: false,
+      },
+      {
+        answer: activeExpression?.falseAnswerTwo,
+        order: shuffledOrders[2],
+        correct: false,
+        highlight: false,
+      },
+    ];
+
+    // sort activeExpressionChoices by order number
+    activeExpressionChoices.sort((a, b) => a.order - b.order);
+
+    return activeExpressionChoices;
+  }
+
+  function highlightCorrectChoice() {
+    setActiveExpressionChoices((prevChoices) =>
+      prevChoices.map((choice) =>
+        choice.correct ? { ...choice, highlight: true } : choice
+      )
+    );
+  }
+
+  function highlightWrongAndCorrectChoices(answerChosen: string) {
+    setActiveExpressionChoices((prevChoices) =>
+      prevChoices.map((choice) =>
+        choice.answer === answerChosen || choice.correct
+          ? { ...choice, highlight: true }
+          : choice
+      )
+    );
+  }
+
+  useEffect(() => {
+    const activeExpressionChoices = getChoicesInShuffledOrder(
+      expressions[activeExpressionIndex]
+    );
+    setActiveExpressionChoices(activeExpressionChoices);
+  }, [activeExpressionIndex, expressions]);
 
   const progress = (activeExpressionIndex / numberOfExpressions) * 100;
 
@@ -176,6 +213,8 @@ const Game = () => {
                 <Choice
                   key={`${choice.answer}-choice-${id}`}
                   order={choice.order}
+                  isHighlighted={choice.highlight}
+                  isCorrect={choice.correct}
                   handleChoice={handleChoice}
                   handleKeyPress={handleKeyPress}
                   isClickable={isClickable}
