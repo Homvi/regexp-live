@@ -12,7 +12,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {
   getACertainNumberOfExpressionsElement,
-  getRandomNumbers,
   shuffleArray,
 } from '../utils/functions.ts';
 //import { serverBaseUrl as url } from '../config.ts';
@@ -70,29 +69,36 @@ const Game = () => {
     }
   }, [isGameFinished, gameMode]);
 
-  const activeExpression = expressions[activeExpressionIndex];
+  function getChoicesInShuffledOrder(activeExpression: ExpressionType) {
+    const shuffledOrders = shuffleArray([1, 2, 3]);
 
-  const shuffledOrders = shuffleArray([1, 2, 3]);
+    const activeExpressionChoices = [
+      {
+        answer: activeExpression?.rightAnswer,
+        order: shuffledOrders[0],
+        correct: true,
+      },
+      {
+        answer: activeExpression?.falseAnswerOne,
+        order: shuffledOrders[1],
+        correct: false,
+      },
+      {
+        answer: activeExpression?.falseAnswerTwo,
+        order: shuffledOrders[2],
+        correct: false,
+      },
+    ];
 
-  const activeExpressionChoices = [
-    {
-      answer: activeExpression?.rightAnswer,
-      order: shuffledOrders[0], 
-      correct: true,
-    },
-    {
-      answer: activeExpression?.falseAnswerOne,
-      order: shuffledOrders[1], 
-      correct: false,
-    },
-    {
-      answer: activeExpression?.falseAnswerTwo,
-      order: shuffledOrders[2], 
-      correct: false,
-    },
-  ];
+    // sort activeExpressionChoices by order number
+    activeExpressionChoices.sort((a, b) => a.order - b.order);
 
-  activeExpressionChoices.sort((a, b) => a.order - b.order);
+    return activeExpressionChoices;
+  }
+
+  const activeExpressionChoices = getChoicesInShuffledOrder(
+    expressions[activeExpressionIndex]
+  );
 
   function resetGame() {
     setLoading(true);
@@ -112,7 +118,6 @@ const Game = () => {
 
   // show score when it is appropriate
   useEffect(() => {
-    getRandomNumbers();
     function handleFinish() {
       if (numberOfExpressions === activeExpressionIndex) {
         setIsGameFinished(true);
@@ -162,12 +167,12 @@ const Game = () => {
             }`}
           >
             <h2 className={isFontSizeLarge ? 'text-4xl my-6' : 'text-2xl my-6'}>
-              {activeExpression?.expression}
+              {expressions[activeExpressionIndex]?.expression}
             </h2>
             <div className="flex flex-col gap-3 w-full overflow-hidden">
-              {activeExpressionChoices.map((choice) => (
+              {activeExpressionChoices.map((choice, id) => (
                 <Choice
-                  key={`${choice.answer}-choice`}
+                  key={`${choice.answer}-choice-${id}`}
                   order={choice.order}
                   handleChoice={handleChoice}
                   handleKeyPress={handleKeyPress}
