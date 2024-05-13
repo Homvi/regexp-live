@@ -72,23 +72,22 @@ const Game = () => {
 
   const activeExpression = expressions[activeExpressionIndex];
 
-  const arrayOfNumbers = [1, 2, 3];
-  const shuffledOrders = shuffleArray(arrayOfNumbers);
+  const shuffledOrders = shuffleArray([1, 2, 3]);
 
   const activeExpressionChoices = [
     {
       answer: activeExpression?.rightAnswer,
-      order: shuffledOrders[0], // Assign order from shuffled array
+      order: shuffledOrders[0], 
       correct: true,
     },
     {
       answer: activeExpression?.falseAnswerOne,
-      order: shuffledOrders[1], // Assign order from shuffled array
+      order: shuffledOrders[1], 
       correct: false,
     },
     {
       answer: activeExpression?.falseAnswerTwo,
-      order: shuffledOrders[2], // Assign order from shuffled array
+      order: shuffledOrders[2], 
       correct: false,
     },
   ];
