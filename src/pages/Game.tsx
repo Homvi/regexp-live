@@ -53,23 +53,20 @@ const Game = () => {
       handleChoice(answerChosen);
     }
   };
+  
+  // Extracted logic to get shuffled expressions
+  const fetchExpressions = (data: ExpressionType[]) => {
+    const shuffledExpressions = getACertainNumberOfExpressionsElement(data, numberOfExpressions);
+    setExpressions(shuffledExpressions);
+    setLoading(false);
+  };
 
   // get expressions, shuffle them and set as a state
   useEffect(() => {
     if (gameMode === GameMode.EnglishToSpanish) {
-      const shuffeledExpressions = getACertainNumberOfExpressionsElement(
-        englishExampleExpressionsData,
-        numberOfExpressions
-      );
-      setExpressions(shuffeledExpressions);
-      setLoading(false);
+      fetchExpressions(englishExampleExpressionsData);
     } else {
-      const shuffeledExpressions = getACertainNumberOfExpressionsElement(
-        spanishExampleExpressionsData,
-        numberOfExpressions
-      );
-      setExpressions(shuffeledExpressions);
-      setLoading(false);
+      fetchExpressions(spanishExampleExpressionsData);
     }
   }, [isGameFinished, gameMode]);
 
