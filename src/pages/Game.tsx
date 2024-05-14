@@ -30,7 +30,7 @@ const Game = () => {
   const [activeExpressionIndex, setActiveExpressionIndex] = useState(0);
   const [isClickable, setIsClickable] = useState(true);
   const [activeExpressionChoices, setActiveExpressionChoices] = useState<
-  ChoiceType[]
+    ChoiceType[]
   >([]);
 
   const score = useRef(0);
@@ -53,10 +53,13 @@ const Game = () => {
       handleChoice(answerChosen);
     }
   };
-  
+
   // Extracted logic to get shuffled expressions
   const fetchExpressions = (data: ExpressionType[]) => {
-    const shuffledExpressions = getACertainNumberOfExpressionsElement(data, numberOfExpressions);
+    const shuffledExpressions = getACertainNumberOfExpressionsElement(
+      data,
+      numberOfExpressions
+    );
     setExpressions(shuffledExpressions);
     setLoading(false);
   };
@@ -99,25 +102,15 @@ const Game = () => {
   const activeExpression = expressions[activeExpressionIndex];
 
   function handleChoice(answerChosen: string) {
-    if (answerChosen === activeExpression?.rightAnswer) {
-      setIsClickable(false);
-      highlightChoices(answerChosen);
-      console.log('The correct answer has been chosen');
-      setTimeout(() => {
-        score.current++;
-        handleActiveExpressionIncrement();
-      }, 1000);
+    const isCorrect = answerChosen === activeExpression?.rightAnswer;
+    setIsClickable(false);
+    highlightChoices(answerChosen);
+    console.log(isCorrect ? 'The correct answer has been chosen' : 'Incorrect');
+    setTimeout(() => {
+      if (isCorrect) score.current++;
+      handleActiveExpressionIncrement();
       setIsClickable(true);
-    } else {
-      setIsClickable(false);
-      console.log('Incorrect');
-      highlightChoices(answerChosen);
-      answerChosen;
-      setTimeout(() => {
-        handleActiveExpressionIncrement();
-      }, 1000);
-      setIsClickable(true);
-    }
+    }, 1000);
   }
 
   function getChoicesInShuffledOrder(activeExpression: ExpressionType) {
