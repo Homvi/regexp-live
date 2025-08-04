@@ -1,12 +1,6 @@
-interface Expression {
-  id: number;
-  expression: string;
-  rightAnswer: string;
-  falseAnswerOne: string;
-  falseAnswerTwo: string;
-}
+import { ExpressionType } from './types';
 
-export const spanishExampleExpressionsData: Expression[] = [
+export const spanishExampleExpressionsData: ExpressionType[] = [
   {
     id: 1,
     expression: 'Meter la pata',
@@ -79,7 +73,7 @@ export const spanishExampleExpressionsData: Expression[] = [
   },
 ];
 
-export const englishExampleExpressionsData: Expression[] = [
+export const englishExampleExpressionsData: ExpressionType[] = [
   {
     id: 11,
     expression: 'Piece of cake',
@@ -151,5 +145,3 @@ export const englishExampleExpressionsData: Expression[] = [
     falseAnswerTwo: 'Cuando pasa algo malo',
   },
 ];
-
-
