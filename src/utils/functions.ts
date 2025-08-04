@@ -44,6 +44,20 @@ export const getDelayForAnswer = (
   }
 };
 
+/**
+ * Shuffles an array using the Fisher-Yates algorithm.
+ * @param array The array to shuffle.
+ * @returns A new shuffled array (does not mutate the original).
+ */
+export function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]; // Create a copy to avoid mutating the original array
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
+  }
+  return shuffled;
+}
+
 export function getACertainNumberOfExpressionsElement<T>(
   array: T[],
   quantity: number = 5
@@ -54,20 +68,11 @@ export function getACertainNumberOfExpressionsElement<T>(
   }
 
   // Shuffle the array and pick the first `quantity` elements
-  const shuffled = [...array]; // Create a copy of the array to avoid mutating the original
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
-  }
-
+  const shuffled = shuffleArray(array);
   return shuffled.slice(0, quantity); // Return the first `quantity` elements of the shuffled array
 }
 
-export const shuffleArray = (array: number[]) => {
-  const newArray = array.slice(); // Create a copy to avoid mutating the original array
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]]; // Swap elements
-  }
-  return newArray;
+// Legacy function - now uses the generic shuffleArray function
+export const shuffleArrayLegacy = (array: number[]) => {
+  return shuffleArray(array);
 };
