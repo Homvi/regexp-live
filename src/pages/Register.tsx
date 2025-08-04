@@ -56,21 +56,16 @@ const Register = () => {
       email: email,
       password: password,
     };
-    // TODO: remove log
-    console.log(newUser);
     try {
-      console.log('Trying to post data');
       const response = await axios.post(
         'http://localhost:8080/register',
         newUser
       );
-      console.log(response);
       toast(content[language].register.registerOk);
       navigate('/login');
       resetFields();
     } catch (error) {
       toast.error(content[language].register.registerFail);
-      console.log(error);
     }
   };
 
