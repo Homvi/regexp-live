@@ -105,7 +105,6 @@ const Game = () => {
     const isCorrect = answerChosen === activeExpression?.rightAnswer;
     setIsClickable(false);
     highlightChoices(answerChosen);
-    console.log(isCorrect ? 'The correct answer has been chosen' : 'Incorrect');
     setTimeout(() => {
       if (isCorrect) score.current++;
       handleActiveExpressionIncrement();
